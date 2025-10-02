@@ -3,41 +3,39 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Sound Shoppe - Shop</title>
-  <link rel="stylesheet" href="css/style.css">
+  <title>Sound</title>
+  <style>
+    body { font-family: Arial, sans-serif; line-height: 1.6; margin: 20px; background: #f7f7f7; color: #333; }
+    h1, h2 { color: #2c3e50; }
+    .product { border: 1px solid #ccc; border-radius: 8px; padding: 15px; margin-bottom: 20px; background: #fff; max-width: 400px; }
+    .btn { display: inline-block; padding: 10px 20px; background: #2c3e50; color: #fff; text-decoration: none; border-radius: 5px; margin-top: 10px; }
+    .products-container { display: flex; flex-wrap: wrap; gap: 20px; }
+  </style>
 </head>
 <body>
   <header>
-    <h1>Sound Shoppe</h1>
-    <nav>
+    <h1 style="text-align:center;">Sound</h1>
+    <nav style="text-align:center;">
       <a href="index.html">Home</a> |
-      <a href="shop.html">Shop</a> |
-      <a href="checkout.html">Checkout</a> |
-      <a href="questions.html">Questions</a>
     </nav>
   </header>
 
   <main>
-    <h2>Our Products</h2>
-    <div class="product">
-      <img src="assets/images/headphones.jpg" alt="Studio Headphones" width="200">
-      <h3>Studio Headphones</h3>
-      <p>High-fidelity sound for music lovers.</p>
-      <p><strong>$99</strong></p>
-      <a href="checkout.html" class="btn">Add to Cart</a>
-    </div>
+    <div class="products-container">
+      <div class="product">
+        <h2>Blondies</h2>
+        <p>Delicious, chewy, small-batch blondies made with love and natural ingredients.No Seed Oil!</p>
+        <a href="#" class="btn">Buy Now</a>
+      </div>
 
-    <div class="product">
-      <img src="assets/images/speaker.jpg" alt="Portable Speaker" width="200">
-      <h3>Portable Speaker</h3>
-      <p>Wireless, powerful sound in a compact size.</p>
-      <p><strong>$149</strong></p>
-      <a href="checkout.html" class="btn">Add to Cart</a>
-    </div>
-  </main>
+      <div class="product">
+        <h2>Roman Sourdough</h2>
+        <p>Authentic, slow-fermented Roman sourdough bread. Crispy crust, soft inside, all-natural.No Seed Oil</p>
+        <a href="#" class="btn">Buy Now</a>
+      </div>
 
-  <footer>
-    <p>&copy; 2025 Sound Shoppe</p>
-  </footer>
-</body>
-</html>
+      <div class="product">
+        <h2>Handmade Tallow Soap</h2>
+        <p>Small-batch, natural tallow soap. Gentle on skin, crafted with care.</p>
+        <a href="#" class="btn">Buy Now</a>
+
