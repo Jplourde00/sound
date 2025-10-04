@@ -17,9 +17,15 @@
       margin-bottom: 30px;
     }
 
+    header img {
+      max-width: 150px;
+      display: block;
+      margin: 0 auto 10px auto;
+    }
+
     header h1 {
       font-size: 3em;
-      margin-bottom: 10px;
+      margin: 5px 0;
     }
 
     nav a {
@@ -67,6 +73,7 @@
       border-radius: 5px;
       cursor: pointer;
       text-decoration: none;
+      margin-top: 10px;
     }
 
     .btn:hover {
@@ -77,15 +84,24 @@
       text-align: center;
       margin-top: 40px;
       color: #666;
+      padding-bottom: 20px;
     }
   </style>
 </head>
 <body>
   <header>
-    <h1>Sound</h1>
+    <!-- Logo -->
+    <img src="images/file_000000009c8861f98309f962b9c7288a.png" alt="Sound LLC Logo">
+
+    <!-- Main Title -->
+    <h1>Sound LLC</h1>
+
+    <!-- Navigation -->
     <nav>
       <a href="index.html">Home</a> |
-      <a href="shop.html">Shop</a>
+      <a href="shop.html">Shop</a> |
+      <a href="checkout.html">Checkout</a> |
+      <a href="questions.html">Questions</a>
     </nav>
   </header>
 
@@ -101,18 +117,18 @@
       </section>
 
       <!-- Product 2: Roman Sourdough -->
-      <section class="product">       
+      <section class="product">
+        <img src="images/20251003_232446.jpg" alt="Roman Sourdough" width="250">
         <h2>Roman Sourdough</h2>
-        <img src="images/20251003_232446.jpg"
         <p>Authentic, slow-fermented Roman sourdough bread. Crispy crust, soft inside, all-natural. No seed oils!</p>
         <a href="#" class="btn">Buy Now</a>
       </section>
 
       <!-- Product 3: Tallow Soap -->
       <section class="product">
+        <img src="images/20251004_073214.jpg" alt="Tallow Soap 1" width="250">
+        <img src="images/20251004_073238.jpg" alt="Tallow Soap 2" width="250">
         <h2>Tallow Soap</h2>
-        <img src="images/20251004_073214.jpg" alt="Tallow Soap 2" width="250"> 
-        <img src="images/20251004_073238.jpg" alt="Tallow Soap 3" width="250">
         <p>Handcrafted, small-batch soap made with pure tallow for naturally nourished skin.</p>
         <a href="#" class="btn">Buy Now</a>
       </section>
@@ -121,7 +137,7 @@
   </main>
 
   <footer>
-    <p>&copy; 2025 Sound Shoppe</p>
+    <p>&copy; 2025 Sound LLC</p>
   </footer>
 </body>
 </html>
