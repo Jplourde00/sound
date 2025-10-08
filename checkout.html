@@ -3,13 +3,13 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Sound LLC - Checkout</title>
+  <title>Sound | Checkout</title>
   <style>
     body {
       font-family: Arial, sans-serif;
-      line-height: 1.6;
       margin: 20px;
-      background-color: #f7f7f7;
+      background: #f7f7f7;
+      color: #333;
     }
 
     header {
@@ -23,11 +23,6 @@
       margin: 0 auto 10px auto;
     }
 
-    header h1 {
-      font-size: 3em;
-      margin: 5px 0;
-    }
-
     nav a {
       margin: 0 10px;
       text-decoration: none;
@@ -39,48 +34,63 @@
       color: #1a2a38;
     }
 
-    main {
-      max-width: 800px;
+    .container {
+      max-width: 600px;
       margin: 0 auto;
-      padding: 0 10px;
+      background: #fff;
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 2px 2px 10px rgba(0,0,0,0.1);
     }
 
-    section {
-      margin-bottom: 30px;
+    label {
+      display: block;
+      margin-top: 15px;
+      font-weight: bold;
     }
 
-    .btn {
-      display: inline-block;
-      padding: 10px 20px;
+    input, textarea {
+      width: 100%;
+      padding: 10px;
+      margin-top: 5px;
+      border-radius: 5px;
+      border: 1px solid #ccc;
+      box-sizing: border-box;
+    }
+
+    button {
+      display: block;
+      margin: 20px auto 0 auto;
+      padding: 10px 25px;
       background: #2c3e50;
       color: #fff;
       border: none;
       border-radius: 5px;
       cursor: pointer;
-      text-decoration: none;
-      margin-top: 10px;
+      font-weight: bold;
     }
 
-    .btn:hover {
+    button:hover {
       background: #1a2a38;
     }
 
-    footer {
+    .qr-code {
       text-align: center;
-      margin-top: 40px;
-      color: #666;
-      padding-bottom: 20px;
+      margin-top: 20px;
+    }
+
+    .qr-code img {
+      max-width: 200px;
+      border: 2px solid #ccc;
+      padding: 5px;
+      border-radius: 8px;
     }
   </style>
 </head>
 <body>
+
   <header>
-    <!-- Logo -->
     <img src="images/file_000000009c8861f98309f962b9c7288a.png" alt="Sound LLC Logo">
-
-    <!-- Main Title -->
-
-    <!-- Navigation -->
     <nav>
       <a href="index.html">Home</a> |
       <a href="shop.html">Shop</a> |
@@ -90,14 +100,48 @@
   </header>
 
   <main>
-    <section>
-      <h2>Your Cart</h2>
-      <p>Placeholder for items added to cart and checkout button.</p>
-    </section>
+    <div class="container">
+      <h1>Checkout</h1>
+      <p>Please fill out your details and complete your order using the Zelle QR code below.</p>
+
+      <form id="checkoutForm">
+        <label for="name">Name</label>
+        <input type="text" id="name" name="name" required>
+
+        <label for="email">Email</label>
+        <input type="email" id="email" name="email" required>
+
+        <label for="address">Address</label>
+        <textarea id="address" name="address" rows="3" required></textarea>
+
+        <label for="orderSummary">Order Summary</label>
+        <textarea id="orderSummary" name="orderSummary" rows="5" placeholder="List your items, quantity, and variety here" required></textarea>
+
+        <button type="submit">Submit Order</button>
+      </form>
+
+      <div class="qr-code">
+        <p>Scan the QR code below to pay with Zelle:</p>
+        <img src="images/zelle_qr.png" alt="Zelle QR Code">
+      </div>
+    </div>
   </main>
 
-  <footer>
-    <p>&copy; 2025 Sound LLC.</p>
-  </footer>
+  <script>
+    const form = document.getElementById('checkoutForm');
+    form.addEventListener('submit', function(e) {
+      e.preventDefault();
+      alert('Thank you! Your order has been submitted. Please complete payment using the Zelle QR code.');
+      form.reset();
+    });
+
+    // Pre-fill order summary if data is passed via URL
+    const urlParams = new URLSearchParams(window.location.search);
+    const item = urlParams.get('item');
+    if(item) {
+      document.getElementById('orderSummary').value = item;
+    }
+  </script>
+
 </body>
 </html>
