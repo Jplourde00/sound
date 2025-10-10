@@ -77,6 +77,7 @@
     .qr-code {
       text-align: center;
       margin-top: 20px;
+      display: none; /* Hide initially */
     }
 
     .qr-code img {
@@ -85,6 +86,22 @@
       padding: 5px;
       border-radius: 8px;
     }
+
+    .btc-address {
+      margin-top: 10px;
+      font-family: monospace;
+      background: #f1f1f1;
+      display: inline-block;
+      padding: 6px;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+
+    .copy-message {
+      color: green;
+      display: none;
+      margin-top: 5px;
+    }
   </style>
 </head>
 <body>
@@ -92,20 +109,21 @@
   <header>
     <img src="images/soundlogo.png" alt="Sound LLC Logo">
     <nav>
-    <a href="index.html">Home</a> |
-    <a href="soap.html">Soaps</a> |
-    <a href="sweets.html">Sweets</a> |
-    <a href="checkout.html">Checkout</a> |
-    <a href="questions.html">Questions</a>
+      <a href="index.html">Home</a> |
+      <a href="soap.html">Soaps</a> |
+      <a href="sweets.html">Sweets</a> |
+      <a href="checkout.html">Checkout</a> |
+      <a href="questions.html">Questions</a>
     </nav>
   </header>
 
   <main>
     <div class="container">
       <h1>Checkout</h1>
-      <p>Please fill out your details and complete your order using the Zelle QR code below.</p>
+      <p>Please fill out your details and submit your order. Payment options will appear after submission.</p>
 
-      <form id="checkoutForm">
+      <!-- Formspree integration -->
+      <form id="checkoutForm" action="https://formspree.io/f/xjkaarpq" method="POST">
         <label for="name">Name</label>
         <input type="text" id="name" name="name" required>
 
@@ -121,19 +139,46 @@
         <button type="submit">Submit Order</button>
       </form>
 
-      <div class="qr-code">
-        <p>Scan the QR code below to pay with Zelle:</p>
-        <img src="images/zelle_qr.png" alt="Zelle QR Code">
+      <div id="paymentSection" class="qr-code">
+        <p>Scan the QR code below to pay with Cash App:</p>
+        <img src="images/cashtag.png" alt="Cash App">
+
+        <p><strong>Or pay with Bitcoin:</strong></p>
+        <p id="btcAddress" class="btc-address" title="Click to copy">
+          bc1qshjupt2nl8q0telxycgqkf2re0m0m7dtleslpn
+        </p>
+        <p id="copyMessage" class="copy-message">Copied to clipboard!</p>
       </div>
     </div>
   </main>
 
   <script>
     const form = document.getElementById('checkoutForm');
-    form.addEventListener('submit', function(e) {
+    const paymentSection = document.getElementById('paymentSection');
+    const btcAddress = document.getElementById('btcAddress');
+    const copyMessage = document.getElementById('copyMessage');
+
+    form.addEventListener('submit', async function(e) {
       e.preventDefault();
-      alert('Thank you! Your order has been submitted. Please complete payment using the Zelle QR code.');
-      form.reset();
+
+      // Send form data to Formspree
+      const formData = new FormData(form);
+      const response = await fetch(form.action, {
+        method: form.method,
+        body: formData,
+        headers: {
+          'Accept': 'application/json'
+        }
+      });
+
+      if(response.ok) {
+        // Show payment options only after successful submission
+        paymentSection.style.display = 'block';
+        form.reset();
+        alert('Thank you! Your order has been submitted. Payment options are now displayed below.');
+      } else {
+        alert('Oops! There was a problem submitting your form.');
+      }
     });
 
     // Pre-fill order summary if data is passed via URL
@@ -142,6 +187,14 @@
     if(item) {
       document.getElementById('orderSummary').value = item;
     }
+
+    // Bitcoin address click-to-copy
+    btcAddress.addEventListener('click', () => {
+      navigator.clipboard.writeText(btcAddress.textContent.trim()).then(() => {
+        copyMessage.style.display = 'block';
+        setTimeout(() => copyMessage.style.display = 'none', 2000);
+      });
+    });
   </script>
 
 </body>
