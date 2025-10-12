@@ -140,8 +140,21 @@
       </form>
 
       <div id="paymentSection" class="qr-code">
-        <p>Scan the QR code below to pay with Cash App:</p>
-        <img src="images/cashtag.png" alt="Cash App">
+        <p>Scan the QR code below to pay with Cash App or PayPal:</p>
+
+        <div style="display: flex; justify-content: center; gap: 20px; flex-wrap: wrap;">
+          <!-- CashApp QR -->
+          <div>
+            <img src="images/cashtag.png" alt="Cash App">
+            <p style="text-align:center;"><strong>Cash App</strong></p>
+          </div>
+
+          <!-- PayPal QR -->
+          <div>
+            <img src="images/paypalqr.jpg" alt="PayPal">
+            <p style="text-align:center;"><strong>PayPal</strong></p>
+          </div>
+        </div>
 
         <p><strong>Or pay with Bitcoin:</strong></p>
         <p id="btcAddress" class="btc-address" title="Click to copy">
@@ -163,30 +176,27 @@
 
       // Send form data to Formspree
       const formData = new FormData(form);
-      const response = await fetch(form.action, {
-        method: form.method,
-        body: formData,
-        headers: {
-          'Accept': 'application/json'
-        }
-      });
+      try {
+        const response = await fetch(form.action, {
+          method: form.method,
+          body: formData,
+          headers: {
+            'Accept': 'application/json'
+          }
+        });
 
-      if(response.ok) {
-        // Show payment options only after successful submission
-        paymentSection.style.display = 'block';
-        form.reset();
-        alert('Thank you! Your order has been submitted. Payment options are now displayed below.');
-      } else {
-        alert('Oops! There was a problem submitting your form.');
+        if(response.ok) {
+          // Show payment options only after successful submission
+          paymentSection.style.display = 'block';
+          form.reset();
+          alert('Thank you! Your order has been submitted. Payment options are now displayed below.');
+        } else {
+          alert('Oops! There was a problem submitting your form.');
+        }
+      } catch(err) {
+        alert('Oops! There was a network problem submitting your form.');
       }
     });
-
-    // Pre-fill order summary if data is passed via URL
-    const urlParams = new URLSearchParams(window.location.search);
-    const item = urlParams.get('item');
-    if(item) {
-      document.getElementById('orderSummary').value = item;
-    }
 
     // Bitcoin address click-to-copy
     btcAddress.addEventListener('click', () => {
