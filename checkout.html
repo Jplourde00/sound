@@ -35,7 +35,7 @@
     }
 
     .container {
-      max-width: 600px;
+      max-width: 700px;
       margin: 0 auto;
       background: #fff;
       padding: 20px;
@@ -102,6 +102,41 @@
       display: none;
       margin-top: 5px;
     }
+
+    /* Cart Styles */
+    #cartList {
+      list-style: none;
+      padding: 0;
+      margin: 10px 0;
+    }
+
+    #cartList li {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 5px 0;
+      border-bottom: 1px solid #ddd;
+    }
+
+    .cart-item-controls button {
+      margin-left: 5px;
+      padding: 3px 7px;
+      font-size: 0.9em;
+      cursor: pointer;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      background: #eee;
+    }
+
+    .cart-item-controls button:hover {
+      background: #ddd;
+    }
+
+    .cart-summary {
+      font-weight: bold;
+      margin-top: 10px;
+      text-align: right;
+    }
   </style>
 </head>
 <body>
@@ -122,7 +157,14 @@
       <h1>Checkout</h1>
       <p>Please fill out your details and submit your order. Payment options will appear after submission.</p>
 
-      <!-- Formspree integration -->
+      <!-- Cart Section -->
+      <h2>Your Cart</h2>
+      <ul id="cartList">
+        <li>Your cart is empty.</li>
+      </ul>
+      <p class="cart-summary">Subtotal: $<span id="subtotal">0.00</span></p>
+
+      <!-- Form -->
       <form id="checkoutForm" action="https://formspree.io/f/xjkaarpq" method="POST">
         <label for="name">Name</label>
         <input type="text" id="name" name="name" required>
@@ -134,22 +176,20 @@
         <textarea id="address" name="address" rows="3" required></textarea>
 
         <label for="orderSummary">Order Summary</label>
-        <textarea id="orderSummary" name="orderSummary" rows="5" placeholder="List your items, quantity, and variety here" required></textarea>
+        <textarea id="orderSummary" name="orderSummary" rows="5" placeholder="Your cart items will appear here" readonly required></textarea>
 
         <button type="submit">Submit Order</button>
       </form>
 
+      <!-- Payment Section -->
       <div id="paymentSection" class="qr-code">
         <p>Scan the QR code below to pay with Cash App or PayPal:</p>
 
         <div style="display: flex; justify-content: center; gap: 20px; flex-wrap: wrap;">
-          <!-- CashApp QR -->
           <div>
             <img src="images/cashtag.png" alt="Cash App">
             <p style="text-align:center;"><strong>Cash App</strong></p>
           </div>
-
-          <!-- PayPal QR -->
           <div>
             <img src="images/paypalqr.jpg" alt="PayPal">
             <p style="text-align:center;"><strong>PayPal</strong></p>
@@ -166,46 +206,107 @@
   </main>
 
   <script>
+    // Simple cart array
+    let cart = JSON.parse(localStorage.getItem('cart')) || [];
+    const cartList = document.getElementById('cartList');
+    const orderSummary = document.getElementById('orderSummary');
+    const subtotalEl = document.getElementById('subtotal');
+
+    // Render Cart
+    function renderCart() {
+      if(cart.length === 0){
+        cartList.innerHTML = '<li>Your cart is empty.</li>';
+        orderSummary.value = '';
+        subtotalEl.textContent = '0.00';
+        return;
+      }
+
+      cartList.innerHTML = '';
+      let summaryText = '';
+      let subtotal = 0;
+
+      cart.forEach((item, index) => {
+        const li = document.createElement('li');
+        const totalPrice = item.price * item.quantity;
+
+        li.innerHTML = `
+          ${item.name} x ${item.quantity} - $${totalPrice.toFixed(2)}
+          <span class="cart-item-controls">
+            <button onclick="changeQuantity(${index}, -1)">-</button>
+            <button onclick="changeQuantity(${index}, 1)">+</button>
+            <button onclick="removeItem(${index})">Remove</button>
+          </span>
+        `;
+
+        cartList.appendChild(li);
+        summaryText += `${item.name} x ${item.quantity} - $${totalPrice.toFixed(2)}\n`;
+        subtotal += totalPrice;
+      });
+
+      orderSummary.value = summaryText.trim();
+      subtotalEl.textContent = subtotal.toFixed(2);
+      localStorage.setItem('cart', JSON.stringify(cart));
+    }
+
+    // Change quantity
+    function changeQuantity(index, delta){
+      cart[index].quantity += delta;
+      if(cart[index].quantity <= 0){
+        cart.splice(index,1);
+      }
+      renderCart();
+    }
+
+    // Remove item
+    function removeItem(index){
+      cart.splice(index,1);
+      renderCart();
+    }
+
+    renderCart();
+
+    // Form submission
     const form = document.getElementById('checkoutForm');
     const paymentSection = document.getElementById('paymentSection');
     const btcAddress = document.getElementById('btcAddress');
     const copyMessage = document.getElementById('copyMessage');
 
-    form.addEventListener('submit', async function(e) {
+    form.addEventListener('submit', async function(e){
       e.preventDefault();
+      if(cart.length === 0){
+        alert("Your cart is empty!");
+        return;
+      }
 
-      // Send form data to Formspree
       const formData = new FormData(form);
-      try {
-        const response = await fetch(form.action, {
+      try{
+        const response = await fetch(form.action,{
           method: form.method,
           body: formData,
-          headers: {
-            'Accept': 'application/json'
-          }
+          headers:{'Accept':'application/json'}
         });
 
-        if(response.ok) {
-          // Show payment options only after successful submission
+        if(response.ok){
           paymentSection.style.display = 'block';
           form.reset();
           alert('Thank you! Your order has been submitted. Payment options are now displayed below.');
+          cart = [];
+          renderCart();
         } else {
           alert('Oops! There was a problem submitting your form.');
         }
-      } catch(err) {
+      } catch(err){
         alert('Oops! There was a network problem submitting your form.');
       }
     });
 
-    // Bitcoin address click-to-copy
+    // Bitcoin click-to-copy
     btcAddress.addEventListener('click', () => {
       navigator.clipboard.writeText(btcAddress.textContent.trim()).then(() => {
         copyMessage.style.display = 'block';
-        setTimeout(() => copyMessage.style.display = 'none', 2000);
+        setTimeout(()=>copyMessage.style.display='none',2000);
       });
     });
   </script>
-
 </body>
 </html>
