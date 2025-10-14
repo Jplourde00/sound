@@ -1,329 +1,184 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Sound LLC - Checkout</title>
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      margin: 20px;
-      background: #f7f7f7;
-      color: #333;
-    }
-
-    header {
-      text-align: center;
-      margin-bottom: 30px;
-    }
-
-    header img {
-      max-width: 150px;
-      display: block;
-      margin: 0 auto 10px auto;
-    }
-
-    nav a {
-      margin: 0 10px;
-      text-decoration: none;
-      color: #2c3e50;
-      font-weight: bold;
-    }
-
-    nav a:hover {
-      color: #1a2a38;
-    }
-
-    .container {
-      max-width: 700px;
-      margin: 0 auto;
-      background: #fff;
-      padding: 20px;
-      border-radius: 8px;
-      box-shadow: 2px 2px 10px rgba(0,0,0,0.1);
-    }
-
-    label {
-      display: block;
-      margin-top: 15px;
-      font-weight: bold;
-    }
-
-    input, textarea {
-      width: 100%;
-      padding: 10px;
-      margin-top: 5px;
-      border-radius: 5px;
-      border: 1px solid #ccc;
-      box-sizing: border-box;
-    }
-
-    button {
-      display: block;
-      margin: 20px auto 0 auto;
-      padding: 10px 25px;
-      background: #2c3e50;
-      color: #fff;
-      border: none;
-      border-radius: 5px;
-      cursor: pointer;
-      font-weight: bold;
-    }
-
-    button:hover {
-      background: #1a2a38;
-    }
-
-    .qr-code {
-      text-align: center;
-      margin-top: 20px;
-      display: none; /* Hide initially */
-    }
-
-    .qr-code img {
-      max-width: 200px;
-      border: 2px solid #ccc;
-      padding: 5px;
-      border-radius: 8px;
-    }
-
-    .btc-address {
-      margin-top: 10px;
-      font-family: monospace;
-      background: #f1f1f1;
-      display: inline-block;
-      padding: 6px;
-      border-radius: 4px;
-      cursor: pointer;
-    }
-
-    .copy-message {
-      color: green;
-      display: none;
-      margin-top: 5px;
-    }
-
-    /* Cart Styles */
-    #cartList {
-      list-style: none;
-      padding: 15px;
-      margin: 10px 0;
-      background: #333; /* Dark background */
-      color: #fff;
-      border-radius: 8px;
-    }
-
-    #cartList li {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 8px 5px;
-      border-bottom: 1px solid #555;
-    }
-
-    .cart-item-controls button {
-      margin-left: 5px;
-      padding: 5px 8px;
-      font-size: 0.9em;
-      cursor: pointer;
-      border: none;
-      border-radius: 4px;
-    }
-
-    .cart-item-controls button:nth-child(1) { /* "-" button */
-      background-color: #888; 
-      color: #fff;
-    }
-
-    .cart-item-controls button:nth-child(2) { /* "+" button */
-      background-color: #4CAF50; 
-      color: #fff;
-    }
-
-    .cart-item-controls button:nth-child(3) { /* "Remove" button */
-      background-color: #e74c3c; 
-      color: #fff;
-    }
-
-    .cart-item-controls button:hover {
-      opacity: 0.8;
-    }
-
-    .cart-summary {
-      font-weight: bold;
-      margin-top: 10px;
-      text-align: right;
-    }
-  </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sound LLC - Checkout</title>
+<style>
+  body { font-family: Arial, sans-serif; margin: 20px; background: #f7f7f7; color: #333; }
+  header { text-align: center; margin-bottom: 30px; }
+  header img { max-width: 150px; display: block; margin: 0 auto 10px auto; }
+  nav a { margin: 0 10px; text-decoration: none; color: #2c3e50; font-weight: bold; }
+  nav a:hover { color: #1a2a38; }
+  .container { max-width: 700px; margin: 0 auto; background: #fff; padding: 20px; border-radius: 8px; box-shadow: 2px 2px 10px rgba(0,0,0,0.1); }
+  label { display: block; margin-top: 15px; font-weight: bold; }
+  input, textarea { width: 100%; padding: 10px; margin-top: 5px; border-radius: 5px; border: 1px solid #ccc; box-sizing: border-box; }
+  button { display: block; margin: 20px auto 0 auto; padding: 10px 25px; background: #2c3e50; color: #fff; border: none; border-radius: 5px; cursor: pointer; font-weight: bold; }
+  button:hover { background: #1a2a38; }
+  .qr-code { text-align: center; margin-top: 20px; display: none; }
+  .qr-code img { max-width: 200px; border: 2px solid #ccc; padding: 5px; border-radius: 8px; }
+  .qr-code img[alt="Zelle"] { max-width: 250px; }
+  .btc-address { margin-top: 10px; font-family: monospace; background: #f1f1f1; display: inline-block; padding: 6px; border-radius: 4px; cursor: pointer; }
+  .copy-message { color: green; display: none; margin-top: 5px; }
+  #cartList { list-style: none; padding: 15px; margin: 10px 0; background: #333; color: #fff; border-radius: 8px; }
+  #cartList li { display: flex; justify-content: space-between; align-items: center; padding: 8px 5px; border-bottom: 1px solid #555; }
+  .cart-item-controls button { margin-left: 5px; padding: 5px 8px; font-size: 0.9em; cursor: pointer; border: none; border-radius: 4px; }
+  .cart-item-controls button:nth-child(1) { background-color: #888; color: #fff; }
+  .cart-item-controls button:nth-child(2) { background-color: #4CAF50; color: #fff; }
+  .cart-item-controls button:nth-child(3) { background-color: #e74c3c; color: #fff; }
+  .cart-item-controls button:hover { opacity: 0.8; }
+  .cart-summary { font-weight: bold; margin-top: 10px; text-align: right; }
+</style>
 </head>
 <body>
 
-  <header>
-    <img src="images/soundlogo.png" alt="Sound LLC Logo">
-    <nav>
-      <a href="index.html">Home</a> |
-      <a href="soap.html">Soaps</a> |
-      <a href="sweets.html">Sweets</a> |
-      <a href="checkout.html">Checkout</a> |
-      <a href="questions.html">Questions</a>
-    </nav>
-  </header>
+<header>
+  <img src="images/soundlogo.png" alt="Sound LLC Logo">
+  <nav>
+    <a href="index.html">Home</a> |
+    <a href="soap.html">Soaps</a> |
+    <a href="sweets.html">Sweets</a> |
+    <a href="checkout.html">Checkout</a> |
+    <a href="questions.html">Questions</a>
+  </nav>
+</header>
 
-  <main>
-    <div class="container">
-      <h1>Checkout</h1>
-      <p>Please fill out your details and submit your order. Payment options will appear after submission.</p>
+<main>
+  <div class="container">
+    <h1>Checkout</h1>
+    <p>Please fill out your details and submit your order. Payment options will appear after submission.</p>
 
-      <!-- Cart Section -->
-      <h2>Your Cart</h2>
-      <ul id="cartList">
-        <li>Your cart is empty.</li>
-      </ul>
-      <p class="cart-summary">Subtotal: $<span id="subtotal">0.00</span></p>
+    <h2>Your Cart</h2>
+    <ul id="cartList"><li>Your cart is empty.</li></ul>
+    <p class="cart-summary">Subtotal: $<span id="subtotal">0.00</span></p>
 
-      <!-- Form -->
-      <form id="checkoutForm" action="https://formspree.io/f/xjkaarpq" method="POST">
-        <label for="name">Name</label>
-        <input type="text" id="name" name="name" required>
+    <form id="checkoutForm">
+      <label for="name">Name</label>
+      <input type="text" id="name" name="name" required>
 
-        <label for="email">Email</label>
-        <input type="email" id="email" name="email" required>
+      <label for="email">Email</label>
+      <input type="email" id="email" name="email" required>
 
-        <label for="address">Address</label>
-        <textarea id="address" name="address" rows="3" required></textarea>
+      <label for="address">Address</label>
+      <textarea id="address" name="address" rows="3" required></textarea>
 
-        <label for="orderSummary">Order Summary</label>
-        <textarea id="orderSummary" name="orderSummary" rows="5" placeholder="Your cart items will appear here" readonly required></textarea>
+      <label for="orderSummary">Order Summary</label>
+      <textarea id="orderSummary" name="orderSummary" rows="5" placeholder="Your cart items will appear here" readonly></textarea>
 
-        <button type="submit">Submit Order</button>
-      </form>
+      <button type="submit">Submit Order</button>
+    </form>
 
-      <!-- Payment Section -->
-      <div id="paymentSection" class="qr-code">
-        <p>Scan the QR code below to pay with Cash App or Zelle:</p>
-
-        <div style="display: flex; justify-content: center; gap: 20px; flex-wrap: wrap;">
-          <div>
-            <img src="images/cashtag.png" alt="Cash App">
-            <p style="text-align:center;"><strong>Cash App</strong></p>
-          </div>
-          <div>
-            <img src="images/zelleqr.png" alt="Zelle">
-            <p style="text-align:center;"><strong>Zelle</strong></p>
-          </div>
+    <div id="paymentSection" class="qr-code">
+      <p>Scan to pay with Cash App or Zelle:</p>
+      <div style="display: flex; justify-content: center; gap: 20px; flex-wrap: wrap;">
+        <div>
+          <img src="images/cashtag.png" alt="Cash App">
+          <p><strong>Cash App</strong></p>
         </div>
-
-        <p><strong>Or pay with Bitcoin:</strong></p>
-        <p id="btcAddress" class="btc-address" title="Click to copy">
-          bc1qshjupt2nl8q0telxycgqkf2re0m0m7dtleslpn
-        </p>
-        <p id="copyMessage" class="copy-message">Copied to clipboard!</p>
+        <div>
+          <img src="images/zelleqr.png" alt="Zelle">
+          <p><strong>Zelle</strong></p>
+        </div>
       </div>
+      <p><strong>Or pay with Bitcoin:</strong></p>
+      <p id="btcAddress" class="btc-address" title="Click to copy">
+        bc1qshjupt2nl8q0telxycgqkf2re0m0m7dtleslpn
+      </p>
+      <p id="copyMessage" class="copy-message">Copied to clipboard!</p>
     </div>
-  </main>
+  </div>
+</main>
 
-  <script>
-    // Simple cart array
-    let cart = JSON.parse(localStorage.getItem('cart')) || [];
-    const cartList = document.getElementById('cartList');
-    const orderSummary = document.getElementById('orderSummary');
-    const subtotalEl = document.getElementById('subtotal');
+<script>
+let cart = JSON.parse(localStorage.getItem('cart') || '[]');
+const cartList = document.getElementById('cartList');
+const orderSummary = document.getElementById('orderSummary');
+const subtotalEl = document.getElementById('subtotal');
+const paymentSection = document.getElementById('paymentSection');
+const btcAddress = document.getElementById('btcAddress');
+const copyMessage = document.getElementById('copyMessage');
 
-    // Render Cart
-    function renderCart() {
-      if(cart.length === 0){
-        cartList.innerHTML = '<li>Your cart is empty.</li>';
-        orderSummary.value = '';
-        subtotalEl.textContent = '0.00';
-        return;
-      }
+function renderCart() {
+  if (cart.length === 0) {
+    cartList.innerHTML = '<li>Your cart is empty.</li>';
+    orderSummary.value = '';
+    subtotalEl.textContent = '0.00';
+    return;
+  }
+  cartList.innerHTML = '';
+  let summaryText = '';
+  let subtotal = 0;
+  cart.forEach((item,i) => {
+    const total = item.price*item.quantity;
+    const li = document.createElement('li');
+    li.innerHTML = `
+      ${item.name} x ${item.quantity} - $${total.toFixed(2)}
+      <span class="cart-item-controls">
+        <button onclick="changeQuantity(${i}, -1)">-</button>
+        <button onclick="changeQuantity(${i}, 1)">+</button>
+        <button onclick="removeItem(${i})">Remove</button>
+      </span>
+    `;
+    cartList.appendChild(li);
+    summaryText += `${item.name} x ${item.quantity} - $${total.toFixed(2)}\n`;
+    subtotal += total;
+  });
+  orderSummary.value = summaryText.trim();
+  subtotalEl.textContent = subtotal.toFixed(2);
+  localStorage.setItem('cart', JSON.stringify(cart));
+}
 
-      cartList.innerHTML = '';
-      let summaryText = '';
-      let subtotal = 0;
+function changeQuantity(i, delta) {
+  cart[i].quantity += delta;
+  if (cart[i].quantity <= 0) cart.splice(i,1);
+  renderCart();
+}
 
-      cart.forEach((item, index) => {
-        const li = document.createElement('li');
-        const totalPrice = item.price * item.quantity;
+function removeItem(i) {
+  cart.splice(i,1);
+  renderCart();
+}
 
-        li.innerHTML = `
-          ${item.name} x ${item.quantity} - $${totalPrice.toFixed(2)}
-          <span class="cart-item-controls">
-            <button onclick="changeQuantity(${index}, -1)">-</button>
-            <button onclick="changeQuantity(${index}, 1)">+</button>
-            <button onclick="removeItem(${index})">Remove</button>
-          </span>
-        `;
+renderCart();
 
-        cartList.appendChild(li);
-        summaryText += `${item.name} x ${item.quantity} - $${totalPrice.toFixed(2)}\n`;
-        subtotal += totalPrice;
-      });
+// AJAX Formspree submission
+document.getElementById('checkoutForm').addEventListener('submit', async e => {
+  e.preventDefault();
+  if(cart.length === 0) { alert('Your cart is empty!'); return; }
 
-      orderSummary.value = summaryText.trim();
-      subtotalEl.textContent = subtotal.toFixed(2);
-      localStorage.setItem('cart', JSON.stringify(cart));
-    }
-
-    // Change quantity
-    function changeQuantity(index, delta){
-      cart[index].quantity += delta;
-      if(cart[index].quantity <= 0){
-        cart.splice(index,1);
-      }
-      renderCart();
-    }
-
-    // Remove item
-    function removeItem(index){
-      cart.splice(index,1);
-      renderCart();
-    }
-
-    renderCart();
-
-    // Form submission
-    const form = document.getElementById('checkoutForm');
-    const paymentSection = document.getElementById('paymentSection');
-    const btcAddress = document.getElementById('btcAddress');
-    const copyMessage = document.getElementById('copyMessage');
-
-    form.addEventListener('submit', async function(e){
-      e.preventDefault();
-      if(cart.length === 0){
-        alert("Your cart is empty!");
-        return;
-      }
-
-      const formData = new FormData(form);
-      try{
-        const response = await fetch(form.action,{
-          method: form.method,
-          body: formData,
-          headers:{'Accept':'application/json'}
-        });
-
-        if(response.ok){
-          paymentSection.style.display = 'block';
-          form.reset();
-          alert('Thank you! Your order has been submitted. Payment options are now displayed below.');
-          cart = [];
-          renderCart();
-        } else {
-          alert('Oops! There was a problem submitting your form.');
-        }
-      } catch(err){
-        alert('Oops! There was a network problem submitting your form.');
-      }
+  const formData = new FormData();
+  formData.append('name', document.getElementById('name').value);
+  formData.append('email', document.getElementById('email').value);
+  formData.append('address', document.getElementById('address').value);
+  formData.append('orderSummary', orderSummary.value);
+  
+  try {
+    const response = await fetch('https://formspree.io/f/xjkaarpq', {
+      method: 'POST',
+      body: formData,
+      headers: { 'Accept': 'application/json' }
     });
+    if(response.ok){
+      alert('Order submitted! Payment options now visible.');
+      paymentSection.style.display = 'block';
+      cart = [];
+      localStorage.removeItem('cart');
+      renderCart();
+      e.target.reset();
+    } else { alert('Error submitting order. Try again.'); }
+  } catch {
+    alert('Network error — please try again later.');
+  }
+});
 
-    // Bitcoin click-to-copy
-    btcAddress.addEventListener('click', () => {
-      navigator.clipboard.writeText(btcAddress.textContent.trim()).then(() => {
-        copyMessage.style.display = 'block';
-        setTimeout(()=>copyMessage.style.display='none',2000);
-      });
-    });
-  </script>
+// BTC copy
+btcAddress.addEventListener('click', () => {
+  navigator.clipboard.writeText(btcAddress.textContent.trim()).then(() => {
+    copyMessage.style.display = 'block';
+    setTimeout(()=>copyMessage.style.display='none',1500);
+  });
+});
+</script>
+
 </body>
 </html>
